@@ -1,0 +1,25 @@
+version: '3'
+services:
+  jupyter:
+    image: jupyter/base-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work  # Cria um volume para compartilhar dados/notebooks
+    environment:
+    - JUPYTER_ENABLE_LAB=yes
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./elasticsearch_data:/usr/share/elasticsearch/data  # Cria um volume para persistir dados do Elasticsearch
+
+  custom-jupyter:
+    image: helomach/custom-jupyter:latest
+    ports:
+      - "8080:80" 
